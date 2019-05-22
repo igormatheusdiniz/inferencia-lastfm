@@ -28,7 +28,8 @@ lastfm = read_csv(here::here("data/experimento-lastfm.csv"),
                   col_types = cols(.default = col_double(), 
                                    user = col_character()))
 
-lastfm = lastfm %>% 
+lastfm = lastfm %>%
+  sample_n(11880) %>%     
   na.omit(.) %>%     
   select(news, old, mediana_pop)
 
@@ -58,15 +59,17 @@ theta = funcao_theta(lastfm)
 set.seed(1212)
 
 amostra = lastfm %>%  
-  sample_n(200) #depois pega uma amostra de 200 de 300 ?????????????
+  sample_n(400)
+
 theta_c = funcao_theta(amostra)
+
 ```
 
 ```{r}
-repeticoes = 6000 # pelo menos 2000, mas mais não faz mal.
+repeticoes = 4000 # pelo menos 2000, mas mais não faz mal.
 um_bootstrap <- function(x){
-  proporcao = x %>% pull(p)
-  boot_x <- sample(proporcao,           # amostre dos dados
+  p = x %>% pull(p)
+  boot_x <- sample(p,           # amostre dos dados
                    size = NROW(x), # tamanho igual ao recebido
                    replace = TRUE) # aqui é o bootstrap
   return(mean(boot_x))
@@ -78,7 +81,7 @@ reamostragens
 ```
 
 ```{r}
-set.seed(1212)
+
 reamostragens %>%
   ggplot(aes(x = theta_c_s)) +
   geom_histogram(binwidth = .001,
@@ -129,7 +132,7 @@ ggplot() +
   ) +
   geom_vline(xintercept = theta,
              color = "blue",
-             size = 1.2) +
+             size = 1) +
   geom_vline(xintercept = theta_c, color = "dark green") +
   labs(title = expression("Intervalo estimado via bootstrap"))
 ```
