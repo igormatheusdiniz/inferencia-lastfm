@@ -1,6 +1,6 @@
 ---
 title: "Implementando ICs"
-author: "Nazareno"
+author: "Igor Matheus Castor Diniz Pinheiro"
 output:
   html_document:
     theme: readable
